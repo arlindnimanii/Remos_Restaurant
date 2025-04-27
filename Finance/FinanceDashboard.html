@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Wash Financial Dashboard</title>
+
+  <!-- Styles -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+<script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .section-title { font-size: 1.5rem; font-weight: 700; }
+    .card { border-radius: 0.5rem; }
+    .filter-section { background-color: #f8f9fa; border-radius: 0.5rem; padding: 1rem; }
+    
+    /* CSS Chart Styles */
+    .bar-chart {
+      display: flex;
+      height: 300px;
+      align-items: flex-end;
+      gap: 10px;
+      padding-top: 20px;
+    }
+    .bar {
+      flex: 1;
+      background-color: #4bc0c0;
+      position: relative;
+      min-width: 30px;
+      border-radius: 5px 5px 0 0;
+    }
+    .bar-label {
+      position: absolute;
+      bottom: -25px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+    }
+    .bar-value {
+      position: absolute;
+      top: -20px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+    }
+    
+    .doughnut-chart {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .doughnut {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #ff6384 0% 25%,
+        #36a2eb 25% 50%,
+        #ffce56 50% 70%,
+        #4bc0c0 70% 85%,
+        #9966ff 85% 100%
+      );
+    }
+    .doughnut-center {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+    .doughnut-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .doughnut-legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+    }
+    .doughnut-legend-color {
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
+      border-radius: 3px;
+    }
+    
+    .line-chart {
+      height: 300px;
+      position: relative;
+      padding: 20px 0;
+    }
+    .line-chart-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .line-chart-grid-line {
+      border-top: 1px dashed #e2e8f0;
+    }
+    .line-chart-labels {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+    .line-chart-label {
+      font-size: 12px;
+    }
+    .line-chart-data {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 40px);
+      display: flex;
+      align-items: flex-end;
+    }
+    .line-chart-point {
+      flex: 1;
+      position: relative;
+      height: 100%;
+    }
+    .line-chart-point-value {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: var(--height);
+      background-color: rgba(75, 192, 192, 0.2);
+      border-radius: 5px 5px 0 0;
+    }
+    
+    .line-chart-point-marker {
+      position: absolute;
+      bottom: var(--height);
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background-color: #4bc0c0;
+      border-radius: 50%;
+      transform: translate(-50%, 50%);
+      z-index: 2;
+    }
+  </style>
+</head>
+<div id="sidebar-container"></div>
+<body class="bg-gray-100">
+
+<div class="container-fluid">
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+
+  <!-- Header with Filters -->
+  <header class="text-center mb-5">
+    <h1 class="text-4xl font-bold text-gray-900">Car Wash Financial Dashboard</h1>
+    <p class="text-lg text-gray-500">Monitor your business finances at a glance</p>
+    
+    <!-- Filter Section -->
+    <div class="filter-section mt-4 mb-5">
+     <div class="row">
+  <!-- Location Filter -->
+  <div class="col-md-4 mb-3">
+    <label class="form-label">Location</label>
+    <select class="form-select">
+        <option>All locations</option>
+<option>Frankfurt</option>
+<option>Koblenz</option>
+<option>Koln</option>
+<option>Westerwald</option>
+<option>Wiesbaden</option>
+    </select>
+  </div>
+
+  <!-- From Date -->
+  <div class="col-md-4 mb-3">
+    <label class="form-label">From Date</label>
+    <input type="date" class="form-control" id="fromDate">
+  </div>
+
+  <!-- To Date -->
+  <div class="col-md-4 mb-3">
+    <label class="form-label">To Date</label>
+    <input type="date" class="form-control" id="toDate">
+  </div>
+</div>
+      <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+      <button class="btn btn-outline-secondary" onclick="resetFilters()">Reset</button>
+    </div>
+  </header>
+
+ <!-- Financial Summary Cards -->
+ <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card shadow-lg p-4 h-100">
+        <h5 class="section-title">Total Revenue</h5>
+        <p class="text-3xl font-semibold text-dark">€125,420</p>
+        <p class="text-sm text-gray-500">+15% from last month</p>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card shadow-lg p-4 h-100">
+        <h5 class="section-title">Total Expenses</h5>
+        <p class="text-3xl font-semibold text-red-600">€78,150</p>
+        <p class="text-sm text-gray-500">+8% from last month</p>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card shadow-lg p-4 h-100">
+        <h5 class="section-title">Net Profit</h5>
+        <p class="text-3xl font-semibold text-green-800">€47,270</p>
+        <p class="text-sm text-gray-500">+22% from last month</p>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card shadow-lg p-4 h-100">
+        <h5 class="section-title">Tax Liability</h5>
+        <p class="text-3xl font-semibold text-purple-800">€18,980</p>
+        <p class="text-sm text-gray-500">VAT + Corp Tax</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue & Expense Charts -->
+  <section class="mb-5">
+    <h2 class="section-title mb-4">Monthly Trends</h2>
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-lg p-4 h-100">
+          <h5 class="font-bold">Revenue by Month</h5>
+          <!-- CSS Line Chart -->
+          <div class="line-chart">
+            <div class="line-chart-grid">
+              <div class="line-chart-grid-line"></div>
+              <div class="line-chart-grid-line"></div>
+              <div class="line-chart-grid-line"></div>
+              <div class="line-chart-grid-line"></div>
+              <div class="line-chart-grid-line"></div>
+            </div>
+            <div class="line-chart-data">
+              <div class="line-chart-point">
+                <div class="line-chart-point-value" style="--height: 40%"></div>
+                <div class="line-chart-point-marker" style="--height: 40%"></div>
+                <div class="line-chart-point-connector" style="--angle: 15deg"></div>
+              </div>
+              <div class="line-chart-point">
+                <div class="line-chart-point-value" style="--height: 50%"></div>
+                <div class="line-chart-point-marker" style="--height: 50%"></div>
+                <div class="line-chart-point-connector" style="--angle: 10deg"></div>
+              </div>
+              <div class="line-chart-point">
+                <div class="line-chart-point-value" style="--height: 60%"></div>
+                <div class="line-chart-point-marker" style="--height: 60%"></div>
+                <div class="line-chart-point-connector" style="--angle: 5deg"></div>
+              </div>
+              <div class="line-chart-point">
+                <div class="line-chart-point-value" style="--height: 70%"></div>
+                <div class="line-chart-point-marker" style="--height: 70%"></div>
+                <div class="line-chart-point-connector" style="--angle: -5deg"></div>
+              </div>
+              <div class="line-chart-point">
+                <div class="line-chart-point-value" style="--height: 50%"></div>
+                <div class="line-chart-point-marker" style="--height: 50%"></div>
+                <div class="line-chart-point-connector" style="--angle: -15deg"></div>
+              </div>
+              <div class="line-chart-point">
+                <div class="line-chart-point-value" style="--height: 30%"></div>
+                <div class="line-chart-point-marker" style="--height: 30%"></div>
+              </div>
+            </div>
+            <div class="line-chart-labels">
+              <span class="line-chart-label">Jan</span>
+              <span class="line-chart-label">Feb</span>
+              <span class="line-chart-label">Mar</span>
+              <span class="line-chart-label">Apr</span>
+              <span class="line-chart-label">May</span>
+              <span class="line-chart-label">Jun</span>
+            </div>
+          </div>
+          <div class="mt-2 text-center text-sm text-gray-500">
+            Monthly revenue trend for selected period
+          </div>
+        </div>
+      </div>
+    <div class="col-md-6 mb-6">
+  <div class="bg-white rounded-2xl shadow-lg p-6 h-full">
+    <h5 class="text-xl font-semibold text-gray-700 mb-4">Expenses by Category</h5>
+
+    <!-- CSS Doughnut Chart -->
+    <div class="relative w-64 h-64 mx-auto">
+      <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
+        <!-- Background circle -->
+        <circle cx="18" cy="18" r="15.915" fill="none" stroke="#f3f4f6" stroke-width="3" />
+        
+        <!-- Segments -->
+        <circle cx="18" cy="18" r="15.915" fill="none" stroke="#3b82f6" stroke-width="3" 
+          stroke-dasharray="30, 70" stroke-dashoffset="0" />
+        <circle cx="18" cy="18" r="15.915" fill="none" stroke="#10b981" stroke-width="3"
+          stroke-dasharray="35, 65" stroke-dashoffset="-30" />
+        <circle cx="18" cy="18" r="15.915" fill="none" stroke="#f59e0b" stroke-width="3"
+          stroke-dasharray="20, 80" stroke-dashoffset="-65" />
+        <circle cx="18" cy="18" r="15.915" fill="none" stroke="#9ca3af" stroke-width="3"
+          stroke-dasharray="15, 85" stroke-dashoffset="-85" />
+      </svg>
+
+      <!-- Center Value -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span class="text-2xl font-bold text-gray-800">€78,150</span>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="mt-6 grid grid-cols-2 gap-4 text-sm text-gray-600">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-[#3b82f6]"></span>
+        Food Costs (30%)
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-[#10b981]"></span>
+        Labor (35%)
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-[#f59e0b]"></span>
+        Rent & Utilities (20%)
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-[#9ca3af]"></span>
+        Other (15%)
+      </div>
+    </div>
+</div>
+</div>
+
+    </div>
+  </section>
+
+  <!-- Bank Accounts -->
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">💰 Bank Account Overview</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Bank 1 -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <p class="text-gray-500">Deutsche Bank</p>
+      <h2 class="text-3xl font-bold text-green-600 mt-1">€15,420</h2>
+      <div class="text-xs text-gray-400 mt-2"><i class="fas fa-university"></i> Last updated: 1h ago</div>
+    </div>
+
+    <!-- Bank 2 -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <p class="text-gray-500">Commerzbank</p>
+      <h2 class="text-3xl font-bold text-green-600 mt-1">€8,950</h2>
+      <div class="text-xs text-gray-400 mt-2"><i class="fas fa-university"></i> Last updated: 2h ago</div>
+    </div>
+
+    <!-- Bank 3 -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <p class="text-gray-500">Sparkasse</p>
+      <h2 class="text-3xl font-bold text-green-600 mt-1">€12,230</h2>
+      <div class="text-xs text-gray-400 mt-2"><i class="fas fa-university"></i> Last updated: 30m ago</div>
+    </div>
+
+    <!-- Bank 4 -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <p class="text-gray-500">N26</p>
+      <h2 class="text-3xl font-bold text-green-600 mt-1">€5,780</h2>
+      <div class="text-xs text-gray-400 mt-2"><i class="fas fa-university"></i> Last updated: 10m ago</div>
+    </div>
+  </div>
+
+  <!-- Revenue Stream Performance -->
+  <section class="mt-5 mb-5">
+    <h2 class="section-title">Revenue Stream Performance</h2>
+    <div class="card shadow-lg p-4">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Revenue Source</th>
+              <th>Covers</th>
+              <th>Revenue (€)</th>
+              <th>Cost (€)</th>
+              <th>Profit (€)</th>
+              <th>Margin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>À la Carte Dining</td>
+              <td>2,250</td>
+              <td>68,750</td>
+              <td>24,625</td>
+              <td>44,125</td>
+              <td class="text-success">64%</td>
+            </tr>
+            <tr>
+              <td>Set Menu</td>
+              <td>1,150</td>
+              <td>34,500</td>
+              <td>10,350</td>
+              <td>24,150</td>
+              <td class="text-success">70%</td>
+            </tr>
+            <tr>
+              <td>Beverages</td>
+              <td>3,420</td>
+              <td>25,650</td>
+              <td>5,130</td>
+              <td>20,520</td>
+              <td class="text-success">80%</td>
+            </tr>
+            <tr>
+              <td>Private Events</td>
+              <td>12</td>
+              <td>18,000</td>
+              <td>7,200</td>
+              <td>10,800</td>
+              <td class="text-success">60%</td>
+            </tr>
+            <tr>
+              <td>Takeaway</td>
+              <td>480</td>
+              <td>9,600</td>
+              <td>3,840</td>
+              <td>5,760</td>
+              <td class="text-success">60%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tax Overview (Germany Specific) -->
+  <section class="mb-5">
+    <h2 class="section-title">Tax Overview</h2>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="card shadow-lg p-4 h-100">
+          <h5 class="font-bold">Current Tax Obligations</h5>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Tax Type</th>
+                  <th>Amount (€)</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>VAT (Umsatzsteuer)</td>
+                  <td>12,450</td>
+                  <td>10/05/2024</td>
+                  <td><span class="badge bg-success">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Income Tax (Einkommensteuer)</td>
+                  <td>6,530</td>
+                  <td>10/05/2024</td>
+                  <td><span class="badge bg-success">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Trade Tax (Gewerbesteuer)</td>
+                  <td>4,200</td>
+                  <td>15/05/2024</td>
+                  <td><span class="badge bg-success">Pending</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="card shadow-lg p-4 h-100">
+          <h5 class="font-bold">Tax Payments This Year</h5>
+          <!-- CSS Bar Chart -->
+          <div class="bar-chart">
+            <div class="bar" style="height: 60%">
+              <div class="bar-value">€18,450</div>
+              <div class="bar-label">VAT</div>
+            </div>
+            <div class="bar" style="height: 40%">
+              <div class="bar-value">€12,530</div>
+              <div class="bar-label">Income Tax</div>
+            </div>
+            <div class="bar" style="height: 20%">
+              <div class="bar-value">€4,200</div>
+              <div class="bar-label">Trade Tax</div>
+            </div>
+            <div class="bar" style="height: 10%">
+              <div class="bar-value">€1,200</div>
+              <div class="bar-label">Other</div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <p class="mb-1"><strong>Total Paid YTD:</strong> €36,380</p>
+            <p class="mb-1"><strong>Estimated Annual Liability:</strong> €62,000</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cash Flow Statement -->
+  <section class="mb-5">
+    <h2 class="section-title">Cash Flow Statement</h2>
+    <div class="card shadow-lg p-4">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount (€)</th>
+              <th>% of Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Operating Activities</strong></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Cash from Food Sales</td>
+              <td>103,250</td>
+              <td>82%</td>
+            </tr>
+            <tr>
+              <td>Cash from Beverages</td>
+              <td>25,650</td>
+              <td>20%</td>
+            </tr>
+            <tr>
+              <td>Cash Paid to Suppliers</td>
+              <td>-42,150</td>
+              <td>-34%</td>
+            </tr>
+            <tr>
+              <td>Cash Paid to Employees</td>
+              <td>-27,350</td>
+              <td>-22%</td>
+            </tr>
+            <tr>
+              <td><strong>Investing Activities</strong></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Kitchen Equipment</td>
+              <td>-8,000</td>
+              <td>-6%</td>
+            </tr>
+            <tr>
+              <td><strong>Financing Activities</strong></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Loan Payments</td>
+              <td>-5,500</td>
+              <td>-4%</td>
+            </tr>
+            <tr>
+              <td>Owner Withdrawals</td>
+              <td>-15,000</td>
+              <td>-12%</td>
+            </tr>
+            <tr class="table-active">
+              <td><strong>Net Cash Flow</strong></td>
+              <td><strong>35,900</strong></td>
+              <td><strong>29%</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Financial Ratios -->
+  <section class="mb-5">
+    <h2 class="section-title">Key Financial Ratios</h2>
+    <div class="row">
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-lg p-3 text-center h-100">
+          <p class="text-lg font-semibold">Food Cost %</p>
+          <p class="text-2xl">28%</p>
+          <p class="text-sm text-gray-600">(Food Cost/Revenue)</p>
+          <p class="text-sm text-success">Excellent (<30%)</p>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-lg p-3 text-center h-100">
+          <p class="text-lg font-semibold">Labor Cost %</p>
+          <p class="text-2xl">22%</p>
+          <p class="text-sm text-gray-600">(Labor Cost/Revenue)</p>
+          <p class="text-sm text-success">Good (<25%)</p>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-lg p-3 text-center h-100">
+          <p class="text-lg font-semibold">Prime Cost</p>
+          <p class="text-2xl">50%</p>
+          <p class="text-sm text-gray-600">(Food + Labor Cost)</p>
+          <p class="text-sm text-success">Excellent (<60%)</p>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-lg p-3 text-center h-100">
+          <p class="text-lg font-semibold">Beverage Margin</p>
+          <p class="text-2xl">80%</p>
+          <p class="text-sm text-gray-600">(Beverage Profit/Revenue)</p>
+          <p class="text-sm text-success">Excellent (>75%)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<!-- Minimal Scripts (just for filter buttons - no chart JS) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Simple filter functions (would be replaced with Blazor later)
+  function applyFilters() {
+    const location = document.getElementById('locationFilter').value;
+    const month = document.getElementById('monthFilter').value;
+    const year = document.getElementById('yearFilter').value;
+    
+    alert(`Filters applied (will be functional with backend)\nLocation: ${location}\nMonth: ${month}\nYear: ${year}`);
+  }
+  
+  function resetFilters() {
+    document.getElementById('locationFilter').value = 'all';
+    document.getElementById('monthFilter').value = 'all';
+    document.getElementById('yearFilter').value = '2024';
+  }
+</script>
+
+</body>
+</html>
+
+<script>
+    fetch('../sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+  </script>

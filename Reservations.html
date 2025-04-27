@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remo's Restaurant - Reservation Dashboard</title>
+
+  <!-- Styles -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+<script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+
+  <style>
+    :root {
+      --primary: #e63946;
+      --secondary: #457b9d;
+      --accent: #a8dadc;
+      --dark: #1d3557;
+      --light: #f1faee;
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-confirmed { background-color: #dcfce7; color: #166534; }
+    .status-seated { background-color: #fef3c7; color: #92400e; }
+    .status-completed { background-color: #dbeafe; color: #1e40af; }
+    .status-cancelled { background-color: #fee2e2; color: #991b1b; }
+    .status-no-show { background-color: #e5e7eb; color: #4b5563; }
+    
+    .reservation-card {
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+      border-radius: 12px;
+    }
+    
+    .reservation-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    
+    .reservation-card.confirmed { border-left-color: #166534; }
+    .reservation-card.seated { border-left-color: #92400e; }
+    .reservation-card.completed { border-left-color: #1e40af; }
+    .reservation-card.cancelled { border-left-color: #991b1b; }
+    
+    .table-badge {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    
+    .chart-container {
+      height: 280px;
+      position: relative;
+    }
+    
+    .floating-action-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .floating-action-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+    }
+    
+    .kpi-card {
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    
+    .time-slot {
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .time-slot.available {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    
+    .time-slot.peak {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    
+    .time-slot.booked {
+      background-color: #fee2e2;
+      color: #991b1b;
+      text-decoration: line-through;
+    }
+    
+    .time-slot:hover:not(.booked) {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<div id="sidebar-container"></div>
+<body>
+<div class="container-fluid py-4">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+
+  <!-- Header with Restaurant Branding -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+      <div class="d-flex align-items-center">
+        <div class="me-3" style="width: 50px; height: 50px; background-color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-utensils text-white" style="font-size: 1.5rem;"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-0">Remo's Restaurant</h1>
+          <p class="text-muted mb-0">Reservation & Table Management Dashboard</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 text-end">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="locationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-map-marker-alt me-2"></i>Main Restaurant
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="locationDropdown">
+          <li><a class="dropdown-item" href="#">Main Restaurant</a></li>
+          <li><a class="dropdown-item" href="#">Location 2</a></li>
+          <li><a class="dropdown-item" href="#">Location 3</a></li>
+          <li><a class="dropdown-item" href="#">Location 4</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Navigation -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body py-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <button class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-chevron-left me-1"></i> Previous
+        </button>
+        
+        <div class="text-center">
+          <h4 class="mb-0 fw-bold">Today, April 15, 2023</h4>
+          <small class="text-muted">34 reservations scheduled</small>
+        </div>
+        
+        <button class="btn btn-sm btn-outline-secondary">
+          Next <i class="fas fa-chevron-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="row">
+    <!-- Upcoming Reservations -->
+    <div class="col-lg-7 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white border-0">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-calendar-day me-2" style="color: var(--primary);"></i>Today's Reservations</h5>
+            <div>
+              <button class="btn btn-sm btn-outline-primary me-2">
+                <i class="fas fa-print me-1"></i> Print
+              </button>
+             
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Time</th>
+                  <th>Name</th>
+                  <th>Guests</th>
+                  <th>Table</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Reservation 1 -->
+                <tr class="reservation-card confirmed">
+                  <td class="fw-bold">12:00 PM</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2" style="width: 30px; height: 30px; background-color: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span class="text-muted">JS</span>
+                      </div>
+                      <span>John Smith</span>
+                    </div>
+                  </td>
+                  <td>4</td>
+                  <td><span class="table-badge" style="background-color: #dbeafe; color: #1e40af;">T12</span></td>
+                  <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                  <td><small class="text-muted">Anniversary</small></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                  </td>
+                </tr>
+                
+                <!-- Reservation 2 -->
+                <tr class="reservation-card seated">
+                  <td class="fw-bold">12:15 PM</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2" style="width: 30px; height: 30px; background-color: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span class="text-muted">MJ</span>
+                      </div>
+                      <span>Maria Johnson</span>
+                    </div>
+                  </td>
+                  <td>2</td>
+                  <td><span class="table-badge" style="background-color: #fef3c7; color: #92400e;">T05</span></td>
+                  <td><span class="status-badge status-seated">Seated</span></td>
+                  <td><small class="text-muted">Window table</small></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                  </td>
+                </tr>
+                
+                <!-- Reservation 3 -->
+                <tr class="reservation-card confirmed">
+                  <td class="fw-bold">12:30 PM</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2" style="width: 30px; height: 30px; background-color: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span class="text-muted">RB</span>
+                      </div>
+                      <span>Robert Brown</span>
+                    </div>
+                  </td>
+                  <td>6</td>
+                  <td><span class="table-badge" style="background-color: #dbeafe; color: #1e40af;">T08</span></td>
+                  <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                  <td><small class="text-muted">Business meeting</small></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                  </td>
+                </tr>
+                
+                <!-- Reservation 4 -->
+                <tr class="reservation-card completed">
+                  <td class="fw-bold">1:00 PM</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2" style="width: 30px; height: 30px; background-color: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span class="text-muted">LW</span>
+                      </div>
+                      <span>Lisa Wilson</span>
+                    </div>
+                  </td>
+                  <td>3</td>
+                  <td><span class="table-badge" style="background-color: #dcfce7; color: #166534;">T03</span></td>
+                  <td><span class="status-badge status-completed">Completed</span></td>
+                  <td><small class="text-muted">-</small></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                  </td>
+                </tr>
+                
+                <!-- Reservation 5 -->
+                <tr class="reservation-card confirmed">
+                  <td class="fw-bold">1:30 PM</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar me-2" style="width: 30px; height: 30px; background-color: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span class="text-muted">DM</span>
+                      </div>
+                      <span>David Miller</span>
+                    </div>
+                  </td>
+                  <td>5</td>
+                  <td><span class="table-badge" style="background-color: #dbeafe; color: #1e40af;">T10</span></td>
+                  <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                  <td><small class="text-muted">Allergies: nuts</small></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-0">
+          <nav>
+            <ul class="pagination justify-content-center mb-0">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+              </li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Restaurant Metrics & Floor Plan -->
+    <div class="col-lg-5 mb-4">
+      <div class="row">
+        <!-- Key Metrics -->
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm kpi-card h-100" style="border-top: 4px solid var(--primary);">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-user-friends" style="font-size: 1.5rem; color: var(--primary);"></i>
+              </div>
+              <h3 class="mb-1">84</h3>
+              <p class="text-muted mb-0">Expected Covers</p>
+              <small class="text-success">+12% from yesterday</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm kpi-card h-100" style="border-top: 4px solid var(--secondary);">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-euro-sign" style="font-size: 1.5rem; color: var(--secondary);"></i>
+              </div>
+              <h3 class="mb-1">€2,450</h3>
+              <p class="text-muted mb-0">Projected Revenue</p>
+              <small class="text-success">+8% from yesterday</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm kpi-card h-100" style="border-top: 4px solid #10b981;">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-check-circle" style="font-size: 1.5rem; color: #10b981;"></i>
+              </div>
+              <h3 class="mb-1">28</h3>
+              <p class="text-muted mb-0">Confirmed</p>
+              <small class="text-muted">82% of total</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm kpi-card h-100" style="border-top: 4px solid #f59e0b;">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-chair" style="font-size: 1.5rem; color: #f59e0b;"></i>
+              </div>
+              <h3 class="mb-1">12</h3>
+              <p class="text-muted mb-0">Walk-ins Expected</p>
+              <small class="text-muted">Based on history</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Floor Plan Summary -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="mb-0"><i class="fas fa-chess-board me-2" style="color: var(--dark);"></i>Floor Plan Status</h5>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <!-- Simplified floor plan visualization -->
+            <div class="d-flex flex-wrap justify-content-center">
+              <div class="text-center m-2">
+                <div style="width: 60px; height: 60px; background-color: #dcfce7; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                  <span class="fw-bold">T1</span>
+                </div>
+                <small>Available</small>
+              </div>
+              <div class="text-center m-2">
+                <div style="width: 60px; height: 60px; background-color: #fef3c7; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                  <span class="fw-bold">T2</span>
+                </div>
+                <small>Seated</small>
+              </div>
+              <div class="text-center m-2">
+                <div style="width: 60px; height: 60px; background-color: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                  <span class="fw-bold">T3</span>
+                </div>
+                <small>Reserved</small>
+              </div>
+              <div class="text-center m-2">
+                <div style="width: 60px; height: 60px; background-color: #fee2e2; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                  <span class="fw-bold">T4</span>
+                </div>
+                <small>Unavailable</small>
+              </div>
+            </div>
+            
+            <div class="mt-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="text-muted">Capacity Utilization</span>
+                <span class="text-muted">68%</span>
+              </div>
+              <div class="progress" style="height: 8px; border-radius: 4px;">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 68%;" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Peak Time Analysis -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="mb-0"><i class="fas fa-chart-line me-2" style="color: var(--primary);"></i>Peak Time Analysis</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="d-flex flex-wrap">
+                <!-- Time slots would be generated dynamically in a real app -->
+                <div class="time-slot available">11:00 AM</div>
+                <div class="time-slot available">11:30 AM</div>
+                <div class="time-slot peak">12:00 PM</div>
+                <div class="time-slot peak">12:30 PM</div>
+                <div class="time-slot peak">1:00 PM</div>
+                <div class="time-slot peak">1:30 PM</div>
+                <div class="time-slot available">2:00 PM</div>
+                <div class="time-slot available">2:30 PM</div>
+                <div class="time-slot booked">6:00 PM</div>
+                <div class="time-slot peak">6:30 PM</div>
+                <div class="time-slot peak">7:00 PM</div>
+                <div class="time-slot peak">7:30 PM</div>
+                <div class="time-slot peak">8:00 PM</div>
+                <div class="time-slot available">8:30 PM</div>
+                <div class="time-slot available">9:00 PM</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-light h-100">
+                <div class="card-body">
+                  <h6 class="text-muted">Recommendation</h6>
+                  <p class="mb-2">Add 1 more server during peak hours (12PM-2PM, 6:30PM-8PM)</p>
+                  <small class="text-muted">Based on historical data and current reservations</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- Floating Action Button -->
+<div class="floating-action-btn">
+  <i class="fas fa-plus"></i>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<script>
+    fetch('sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+  </script>

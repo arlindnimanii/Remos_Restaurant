@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Wash Financial Dashboard</title>
+
+  <!-- Styles -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+<script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+<div id="sidebar-container"></div>
+</head>
+<body class="bg-gray-100">
+
+<div class="container-fluid">
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+<!-- Header with Restaurant Image -->
+<div class="container">
+  <div class="position-relative overflow-hidden" style="height: 300px;">
+    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+         class="w-100 h-100 object-cover" style="object-fit: cover;" alt="Remo's Restaurant" />
+
+    <!-- Gradient overlay -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end justify-content-center"
+         style="background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent); padding-bottom: 2rem;">
+      <h1 class="text-white text-4xl font-bold text-center">Remo's Restaurant Locations</h1>
+    </div>
+  </div>
+</div>
+
+<!-- Filter Section -->
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search by city, manager, or status..." />
+        <button class="btn btn-outline-secondary" type="button">
+          <i class="fas fa-filter"></i> Filter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Location Cards Section -->
+<div class="container">
+  <div class="row g-4">
+    
+    <!-- Berlin Main Branch -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card p-3 shadow-sm h-100 structure-card">
+        <div class="d-flex align-items-center mb-3">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle me-3" width="50" height="50" alt="Manager" />
+          <div>
+            <h5 class="mb-0">Frankfurt</h5>
+            <small class="text-muted">Manager: Thomas Müller</small>
+          </div>
+        </div>
+        <p class="mb-1"><i class="fas fa-map-marker-alt text-danger"></i> <strong>Address:</strong> Unter den Linden 10, 10117 Berlin</p>
+        <p class="mb-1"><i class="fas fa-phone text-primary"></i> <strong>Phone:</strong> +49 30 1234567</p>
+        <p class="mb-1"><i class="fas fa-users text-info"></i> <strong>Staff:</strong> 25 employees</p>
+        <p class="mb-1"><i class="fas fa-clock text-warning"></i> <strong>Hours:</strong> 11:00-23:00</p>
+        <p class="mb-2"><strong>Status:</strong> <span class="badge bg-success">Open</span></p>
+        <div class="mt-auto d-flex justify-content-between">
+          <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Munich Location -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card p-3 shadow-sm h-100 structure-card">
+        <div class="d-flex align-items-center mb-3">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-3" width="50" height="50" alt="Manager" />
+          <div>
+            <h5 class="mb-0">Koblenz</h5>
+            <small class="text-muted">Manager: Anna Schmidt</small>
+          </div>
+        </div>
+        <p class="mb-1"><i class="fas fa-map-marker-alt text-danger"></i> <strong>Address:</strong> Marienplatz 8, 80331 München</p>
+        <p class="mb-1"><i class="fas fa-phone text-primary"></i> <strong>Phone:</strong> +49 89 7654321</p>
+        <p class="mb-1"><i class="fas fa-users text-info"></i> <strong>Staff:</strong> 18 employees</p>
+        <p class="mb-1"><i class="fas fa-clock text-warning"></i> <strong>Hours:</strong> 10:30-22:30</p>
+        <p class="mb-2"><strong>Status:</strong> <span class="badge bg-success">Open</span></p>
+        <div class="mt-auto d-flex justify-content-between">
+          <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+         
+        </div>
+      </div>
+    </div>
+
+    <!-- Hamburg Waterfront -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card p-3 shadow-sm h-100 structure-card">
+        <div class="d-flex align-items-center mb-3">
+          <img src="https://randomuser.me/api/portraits/men/67.jpg" class="rounded-circle me-3" width="50" height="50" alt="Manager" />
+          <div>
+            <h5 class="mb-0">Koln</h5>
+            <small class="text-muted">Manager: Klaus Fischer</small>
+          </div>
+        </div>
+        <p class="mb-1"><i class="fas fa-map-marker-alt text-danger"></i> <strong>Address:</strong> HafenCity, 20457 Hamburg</p>
+        <p class="mb-1"><i class="fas fa-phone text-primary"></i> <strong>Phone:</strong> +49 40 9876543</p>
+        <p class="mb-1"><i class="fas fa-users text-info"></i> <strong>Staff:</strong> 22 employees</p>
+        <p class="mb-1"><i class="fas fa-clock text-warning"></i> <strong>Hours:</strong> 11:30-23:30</p>
+        <p class="mb-2"><strong>Status:</strong> <span class="badge bg-success">Open</span></p>
+        <div class="mt-auto d-flex justify-content-between">
+          <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Frankfurt Financial -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card p-3 shadow-sm h-100 structure-card">
+        <div class="d-flex align-items-center mb-3">
+          <img src="https://randomuser.me/api/portraits/women/28.jpg" class="rounded-circle me-3" width="50" height="50" alt="Manager" />
+          <div>
+            <h5 class="mb-0">Westerbald</h5>
+            <small class="text-muted">Manager: Sabine Weber</small>
+          </div>
+        </div>
+        <p class="mb-1"><i class="fas fa-map-marker-alt text-danger"></i> <strong>Address:</strong> Kaiserstraße 15, 60311 Frankfurt</p>
+        <p class="mb-1"><i class="fas fa-phone text-primary"></i> <strong>Phone:</strong> +49 69 2468101</p>
+        <p class="mb-1"><i class="fas fa-users text-info"></i> <strong>Staff:</strong> 15 employees</p>
+        <p class="mb-1"><i class="fas fa-clock text-warning"></i> <strong>Hours:</strong> 11:00-22:00</p>
+        <p class="mb-2"><strong>Status:</strong> <span class="badge bg-success">Open</span></p>
+        <div class="mt-auto d-flex justify-content-between">
+          <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+         
+        </div>
+      </div>
+    </div>
+
+    <!-- Cologne Cathedral -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card p-3 shadow-sm h-100 structure-card">
+        <div class="d-flex align-items-center mb-3">
+          <img src="https://randomuser.me/api/portraits/men/55.jpg" class="rounded-circle me-3" width="50" height="50" alt="Manager" />
+          <div>
+            <h5 class="mb-0">Wiesbaden</h5>
+            <small class="text-muted">Manager: Peter Hoffmann</small>
+          </div>
+        </div>
+        <p class="mb-1"><i class="fas fa-map-marker-alt text-danger"></i> <strong>Address:</strong> Domkloster 4, 50667 Köln</p>
+        <p class="mb-1"><i class="fas fa-phone text-primary"></i> <strong>Phone:</strong> +49 221 1357924</p>
+        <p class="mb-1"><i class="fas fa-users text-info"></i> <strong>Staff:</strong> 20 employees</p>
+        <p class="mb-1"><i class="fas fa-clock text-warning"></i> <strong>Hours:</strong> 10:00-24:00</p>
+        <p class="mb-2"><strong>Status:</strong> <span class="badge bg-success">Open</span></p>
+        <div class="mt-auto d-flex justify-content-between">
+          <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- Add Location Button -->
+<div class="container mt-5 text-center">
+  <button class="btn btn-primary btn-lg">
+    <i class="fas fa-plus me-2"></i> Add New Location
+  </button>
+</div>
+
+<script>
+    fetch('../sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+  </script>

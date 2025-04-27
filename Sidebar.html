@@ -1,0 +1,230 @@
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+<script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+
+<style>
+    [x-cloak] { display: none !important; }
+    body.mobile-menu-open {
+        overflow: hidden;
+    }
+    .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 30;
+    }
+    .sidebar-backdrop.active {
+        display: block;
+    }
+    /* Custom media query for 1920px */
+    @media (min-width: 1920px) {
+        .sidebar-1920\:block {
+            display: block !important;
+        }
+        .sidebar-1920\:hidden {
+            display: none !important;
+        }
+    }
+</style>
+
+<!-- Main Alpine component wrapping everything -->
+<div x-data="{
+    isOpen: window.innerWidth >= 1920,
+    openMenus: {},
+    currentPath: window.location.pathname,
+    checkScreenSize() {
+        this.isOpen = window.innerWidth >= 1920;
+        if (this.isOpen) {
+            document.body.classList.remove('mobile-menu-open');
+            document.querySelector('.sidebar-backdrop')?.classList.remove('active');
+        }
+    },
+    init() {
+        this.checkScreenSize();
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                this.checkScreenSize();
+            }, 100);
+        });
+    }
+}">
+
+    <!-- Mobile hamburger menu button -->
+    <button class="fixed top-4 left-4 z-50 p-2 rounded-md bg-gray-800 text-white sidebar-1920:hidden"
+            @click="isOpen = true; document.body.classList.add('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.add('active')"
+            x-show="!isOpen">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Backdrop overlay for mobile -->
+    <div class="sidebar-backdrop" 
+         :class="{ 'active': isOpen && window.innerWidth < 1920 }"
+         @click="isOpen = false; document.body.classList.remove('mobile-menu-open'); $el.classList.remove('active')"
+         x-transition></div>
+
+    <!-- Sidebar navigation -->
+    <aside class="w-80 bg-dark border-r border-gray-200 fixed h-full transition-transform duration-300 ease-in-out z-40"
+           :class="{
+               '-translate-x-full sidebar-1920:translate-x-0': !isOpen,
+               'translate-x-0': isOpen,
+               'shadow-xl': isOpen && window.innerWidth < 1920
+           }"
+           x-cloak>
+
+        <div class="flex flex-col h-full">
+            <!-- Profile Header -->
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center space-x-4">
+                    <img src="https://remos-restaurants.de/wp-content/uploads/2023/10/logo-1.svg"
+                         alt="Mo's Car Logo"
+                         class="max-w-[130px] h-auto object-contain" />
+                    <div>
+                        <h3 class="text-xl text-white font-semibold">Remo's Restaurant</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="flex-1 overflow-y-auto p-4">
+                <div class="space-y-1">
+                    <!-- Dashboard -->
+                    <a href="/index.html" class="flex items-center px-3 py-2 text-sm font-medium text-white rounded-md mr-2 no-underline hover:bg-gray-700"
+                       :class="{'bg-gray-700': currentPath === 'RemosRestaurant/index.html'}"
+                       @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                        <i class="fas fa-chart-line w-5 h-5 text-blue-500 mr-2"></i>
+                        Dashboard
+                    </a>
+                    
+                    <!-- Accounts Payable -->
+                    <a href="/AccountsPayable.html" class="flex items-center px-3 py-2 text-sm font-medium text-white rounded-md mr-2 no-underline hover:bg-gray-700"
+                       :class="{'bg-gray-700': currentPath === 'RemosRestaurant/AccountsPayable.html'}"
+                       @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                        <i class="fas fa-file-invoice-dollar w-5 h-5 text-blue-500 mr-2"></i>
+                        Accounts Payable
+                    </a>
+                    
+                    <!-- Accounts Receivable -->
+                    <a href="/AccountsReceivable.html" class="flex items-center px-3 py-2 text-sm font-medium text-white rounded-md mr-2 no-underline hover:bg-gray-700"
+                       :class="{'bg-gray-700': currentPath === 'RemosRestaurant/AccountsReceivable.html'}"
+                       @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                        <i class="fas fa-money-bill-wave w-5 h-5 text-blue-500 mr-2"></i>
+                        Accounts Receivable
+                    </a>
+                    
+                    <!-- Reservations -->
+                    <a href="/Reservations.html" class="flex items-center px-3 py-2 text-sm font-medium text-white rounded-md mr-2 no-underline hover:bg-gray-700"
+                       :class="{'bg-gray-700': currentPath === 'RemosRestaurant/Reservations.html'}"
+                       @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                        <i class="fas fa-calendar-check w-5 h-5 text-blue-500 mr-2"></i>
+                        Reservations
+                    </a>
+
+                    <!-- Finance Section -->
+                    <div class="space-y-1">
+                        <button class="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-white rounded-md no-underline hover:bg-gray-700"
+                                :class="{'bg-gray-700': currentPath.startsWith('/Finance')}"
+                                @click="openMenus['finance'] = !openMenus['finance']">
+                            <div class="flex items-center">
+                                <i class="fas fa-chart-pie w-5 h-5 mr-2 text-blue-500"></i>
+                                Finance
+                            </div>
+                            <i class="fas fa-chevron-down text-xs" :class="{'rotate-180': openMenus['finance']}"></i>
+                        </button>
+                        <div x-show="openMenus['finance']" class="pl-4 space-y-1" x-transition>
+                            <a href="/Finance/FinanceDashboard.html" class="flex items-center px-3 py-2 text-sm text-white rounded-md no-underline hover:bg-gray-700"
+                               :class="{'bg-gray-700': currentPath === 'RemosRestaurant/Finance/FinanceDashboard.html'}"
+                               @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                                <i class="fas fa-chart-line w-5 h-5 text-blue-500 mr-2"></i>
+                                Finance Dashboard
+                            </a>
+                            <a href="/Finance/FinanceSummary.html" class="flex items-center px-3 py-2 text-sm text-white rounded-md no-underline hover:bg-gray-700"
+                               :class="{'bg-gray-700': currentPath === 'RemosRestaurant/Finance/FinanceSummary.html'}"
+                               @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                                <i class="fas fa-file-alt w-5 h-5 text-blue-500 mr-2"></i>
+                                Finance Summary
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Section -->
+                    <div class="space-y-1">
+                        <button class="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-white rounded-md no-underline hover:bg-gray-700"
+                                :class="{'bg-gray-700': currentPath.startsWith('/Inventory')}"
+                                @click="openMenus['inventory'] = !openMenus['inventory']">
+                            <div class="flex items-center">
+                                <i class="fas fa-box w-5 h-5 mr-2 text-blue-500"></i>
+                                Inventory
+                            </div>
+                            <i class="fas fa-chevron-down text-xs" :class="{'rotate-180': openMenus['inventory']}"></i>
+                        </button>
+                        <div x-show="openMenus['inventory']" class="pl-4 space-y-1" x-transition>
+                            <a href="/Inventory/Stock.html" class="flex items-center px-3 py-2 text-sm text-white rounded-md no-underline hover:bg-gray-700"
+                               :class="{'bg-gray-700': currentPath === 'RemosRestaurant/Inventory/Stock.html'}"
+                               @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                                <i class="fas fa-boxes w-5 h-5 text-blue-500 mr-2"></i>
+                                Stock
+                            </a>
+                            <a href="/Inventory/Inventory.html" class="flex items-center px-3 py-2 text-sm text-white rounded-md no-underline hover:bg-gray-700"
+                               :class="{'bg-gray-700': currentPath === 'RemosRestaurant/Inventory/Inventory.html'}"
+                               @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                                <i class="fas fa-clipboard-list w-5 h-5 text-blue-500 mr-2"></i>
+                                Inventory
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- HR & Employee Management Section -->
+                    <div class="space-y-1">
+                        <button class="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-white rounded-md no-underline hover:bg-gray-700"
+                                :class="{'bg-gray-700': currentPath.startsWith('/HR_EmployeeManagement')}"
+                                @click="openMenus['hrEmployeeManagement'] = !openMenus['hrEmployeeManagement']">
+                            <div class="flex items-center">
+                                <i class="fas fa-users w-5 h-5 mr-2 text-blue-500"></i>
+                                HR & Employee Management
+                            </div>
+                            <i class="fas fa-chevron-down text-xs" :class="{'rotate-180': openMenus['hrEmployeeManagement']}"></i>
+                        </button>
+                        <div x-show="openMenus['hrEmployeeManagement']" class="pl-4 space-y-1" x-transition>
+                            <a href="/HR_EmployeeManagement/Attendance_Employee_Tracking.html" class="flex items-center px-3 py-2 text-sm text-white rounded-md no-underline hover:bg-gray-700"
+                               :class="{'bg-gray-700': currentPath === 'RemosRestaurant/HR_EmployeeManagement/Attendance_Employee_Tracking.html'}"
+                               @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                                <i class="fas fa-user-clock w-5 h-5 text-blue-500 mr-2"></i>
+                                Attendance & Tracking
+                            </a>
+                            <a href="/HR_EmployeeManagement/Company_Structure.html" class="flex items-center px-3 py-2 text-sm text-white rounded-md no-underline hover:bg-gray-700"
+                               :class="{'bg-gray-700': currentPath === 'RemosRestaurant/HR_EmployeeManagement/Company_Structure.html'}"
+                               @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                                <i class="fas fa-sitemap w-5 h-5 text-blue-500 mr-2"></i>
+                                Company Structure
+                            </a>
+                            <a href="/HR_EmployeeManagement/Schedule_Management.html" class="flex items-center px-3 py-2 text-sm text-white rounded-md no-underline hover:bg-gray-700"
+                               :class="{'bg-gray-700': currentPath === 'RemosRestaurant/HR_EmployeeManagement/Schedule_Management.html'}"
+                               @click="if(window.innerWidth < 1920) { isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active'); }">
+                                <i class="fas fa-calendar-alt w-5 h-5 text-blue-500 mr-2"></i>
+                                Schedule Management
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Collapse Sidebar Button (mobile only) -->
+            <div class="p-4 border-t border-gray-200 sidebar-1920:hidden">
+                <button class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 no-underline"
+                        @click="isOpen = false; document.body.classList.remove('mobile-menu-open'); document.querySelector('.sidebar-backdrop').classList.remove('active')">
+                    <i class="fas fa-arrow-left-long mr-2"></i>
+                    Collapse Sidebar
+                </button>
+            </div>
+        </div>
+    </aside>
+</div>

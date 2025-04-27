@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Owner Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+<script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        .sidebar {
+            min-height: 100vh;
+            position: fixed;
+            width: 250px;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+        .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .progress {
+            height: 10px;
+        }
+        @media (max-width: 992px) {
+            .sidebar {
+                left: -250px;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+        /* CSS Pie Chart */
+        .pie-chart {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #4e73df 0% 55%,
+                #1cc88a 55% 80%,
+                #f6c23e 80% 90%,
+                #36b9cc 90% 100%
+            );
+        }
+    </style>
+</head>
+<div id="sidebar-container"></div>
+<body>
+    <!-- Main Content -->
+    
+        <div class="container-fluid">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+
+                <div class="row mb-4">
+                    <div class="col">
+                        <h2 class="text-4xl font-bold text-gray-900"><i class="fas fa-utensils me-2"></i>Restaurant Accounts Payable</h2>
+                        <p class="text-muted">Manage money owed to food suppliers and vendors</p>
+                    </div>
+                </div>
+    
+                <!-- Filter Section -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Vendor</label>
+                                <select class="form-select">
+                                    <option value="">All Vendors</option>
+                                    <option>Fresh Produce Co.</option>
+                                    <option>Meat & Poultry Suppliers</option>
+                                    <option>Beverage Distributors</option>
+                                    <option>Kitchen Equipment Inc.</option>
+                                    <option>Cleaning Services</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select">
+                                    <option value="">All Statuses</option>
+                                    <option>Pending</option>
+                                    <option>Overdue</option>
+                                    <option>Paid</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Location</label>
+                                <select class="form-select">
+                                    <option>All locations</option>
+                                    <option>Frankfurt</option>
+                                    <option>Koblenz</option>
+                                    <option>Koln</option>
+                                    <option>Westerwald</option>
+                                    <option>Wiesbaden</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Due Date</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-md-12 text-end">
+                                <button class="btn btn-primary me-2">Apply Filters</button>
+                                <button class="btn btn-outline-secondary">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-start border-gray border-4">
+                            <div class="card-body">
+                                <h6 class="text-muted">Total Payable</h6>
+                                <h3 class="text-2xl text-dark">€8,720</h3>
+                                <small class="text-muted">Across all vendors</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-start border-gray border-4">
+                            <div class="card-body">
+                                <h6 class="text-muted">Overdue</h6>
+                                <h3 class="text-2xl text-warning">€1,950</h3>
+                                <small class="text-muted">Past due date</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-start border-gray border-4">
+                            <div class="card-body">
+                                <h6 class="text-muted">Paid This Month</h6>
+                                <h3 class="text-2xl text-success">€5,430</h3>
+                                <small class="text-muted">Already processed</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-start border-gray border-4">
+                            <div class="card-body">
+                                <h6 class="text-muted">Upcoming</h6>
+                                <h3 class="text-2xl text-blue-800">€3,290</h3>
+                                <small class="text-muted">Due in next 30 days</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Payable Transactions Table -->
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Outstanding Payments</h5>
+                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-plus me-1"></i> Add Invoice</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Invoice #</th>
+                                        <th>Vendor</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Date</th>
+                                        <th>Due Date</th>
+                                        <th>Amount (€)</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-danger">
+                                        <td>F-2023-128</td>
+                                        <td>Fresh Produce Co.</td>
+                                        <td>Weekly vegetable delivery</td>
+                                        <td>Food Supplies</td>
+                                        <td>15/04/2023</td>
+                                        <td>20/04/2023</td>
+                                        <td>1,250.00</td>
+                                        <td><span class="badge bg-warning">Overdue</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>M-2023-056</td>
+                                        <td>Meat & Poultry Suppliers</td>
+                                        <td>Monthly meat order</td>
+                                        <td>Food Supplies</td>
+                                        <td>18/04/2023</td>
+                                        <td>28/04/2023</td>
+                                        <td>2,850.00</td>
+                                        <td><span class="badge bg-primary">Pending</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>E-2023-022</td>
+                                        <td>Kitchen Equipment Inc.</td>
+                                        <td>Oven maintenance</td>
+                                        <td>Equipment</td>
+                                        <td>10/04/2023</td>
+                                        <td>25/04/2023</td>
+                                        <td>850.00</td>
+                                        <td><span class="badge bg-success">On Time</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>B-2023-089</td>
+                                        <td>Beverage Distributors</td>
+                                        <td>Wine and spirits delivery</td>
+                                        <td>Beverages</td>
+                                        <td>12/04/2023</td>
+                                        <td>30/04/2023</td>
+                                        <td>1,750.00</td>
+                                        <td><span class="badge bg-success">On Time</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-danger">
+                                        <td>S-2023-015</td>
+                                        <td>Cleaning Services</td>
+                                        <td>Monthly deep cleaning</td>
+                                        <td>Services</td>
+                                        <td>01/04/2023</td>
+                                        <td>05/04/2023</td>
+                                        <td>700.00</td>
+                                        <td><span class="badge bg-warning">Overdue</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <nav class="mt-3">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+    
+                <!-- Restaurant-Specific Visualizations -->
+                <div class="row mt-4">
+                    <!-- Expense Categories -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Expense Categories</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="bg-primary rounded-circle me-2" style="width: 12px; height: 12px;"></span>
+                                                <div>
+                                                    <small class="text-muted">Food Supplies</small>
+                                                    <h6 class="mb-0">€4,850 (55%)</h6>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="bg-success rounded-circle me-2" style="width: 12px; height: 12px;"></span>
+                                                <div>
+                                                    <small class="text-muted">Beverages</small>
+                                                    <h6 class="mb-0">€2,150 (25%)</h6>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="bg-warning rounded-circle me-2" style="width: 12px; height: 12px;"></span>
+                                                <div>
+                                                    <small class="text-muted">Equipment</small>
+                                                    <h6 class="mb-0">€850 (10%)</h6>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="bg-info rounded-circle me-2" style="width: 12px; height: 12px;"></span>
+                                                <div>
+                                                    <small class="text-muted">Services</small>
+                                                    <h6 class="mb-0">€700 (8%)</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="pie-chart mx-auto"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Status -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Payment Status</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="progress mb-3" style="height: 30px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 62%;" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100">
+                                        <span class="ms-2">Paid (€5,430)</span>
+                                    </div>
+                                </div>
+                                <div class="progress mb-3" style="height: 30px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 38%;" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100">
+                                        <span class="ms-2">Pending (€3,290)</span>
+                                    </div>
+                                </div>
+                                <div class="progress" style="height: 30px;">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 22%;" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100">
+                                        <span class="ms-2">Overdue (€1,950)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ 
+
+</body>
+</html>
+
+<script>
+    fetch('sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+  </script>

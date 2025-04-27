@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Owner Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+<script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+
+
+</head>
+<div id="sidebar-container"></div>
+<body>
+<div class="container-fluid">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-4xl font-bold text-gray-900"><i class="fas fa-chart-line me-2"></i>Financial Summary</h2>
+            <p class="text-muted">Overview of accounts payable and receivable</p>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Time Period</label>
+                    <select class="form-select">
+                        <option>Last 7 Days</option>
+                        <option selected>Last 30 Days</option>
+                        <option>Last Quarter</option>
+                        <option>Last Year</option>
+                        <option>Custom Range</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Location</label>
+                  <select class="form-select">
+                      <option>All locations</option>
+      <option>Frankfurt</option>
+      <option>Koblenz</option>
+      <option>Koln</option>
+      <option>Westerwald</option>
+      <option>Wiesbaden</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">From Date</label>
+                    <input type="date" class="form-control" value="2023-03-01">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">To Date</label>
+                    <input type="date" class="form-control" value="2023-04-15">
+                </div>
+                <div class="col-md-12 text-end">
+                    <button class="btn btn-primary me-2">Apply Filters</button>
+                    <button class="btn btn-outline-secondary">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-grey-300 border-4">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Revenue</h6>
+                    <h3 class="text-2xl text-dark">€42,580</h3>
+                    <small class="text-muted">From services and products</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-grey-300 border-4">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Expenses</h6>
+                    <h3 class="text-2xl text-danger">€28,320</h3>
+                    <small class="text-muted">Supplies, utilities, etc.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-grey-300 border-4">
+                <div class="card-body">
+                    <h6 class="text-muted">Net Profit</h6>
+                    <h3 class="text-2xl text-green-800">€14,260</h3>
+                    <small class="text-muted">Before taxes</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-start border-grey-300 border-4">
+                <div class="card-body">
+                    <h6 class="text-muted">Cash Flow</h6>
+                    <h3 class="text-2xl text-blue-800">€9,750</h3>
+                    <small class="text-muted">Net cash position</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">Income vs. Expenses</h5>
+  </div>
+  <div class="card-body">
+    <div class="grid grid-cols-12 gap-2 h-64 items-end border-l border-b border-gray-200 relative " style="height: 400px;" >
+      <!-- Chart bars -->
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-24 bg-green-700 rounded"></div>
+        <div class="w-3 h-16 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">Jan</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-36 bg-green-700 rounded"></div>
+        <div class="w-3 h-20 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">Feb</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-48 bg-green-700 rounded"></div>
+        <div class="w-3 h-28 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">Mar</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-56 bg-green-700 rounded"></div>
+        <div class="w-3 h-32 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">Apr</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-40 bg-green-700 rounded"></div>
+        <div class="w-3 h-24 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">May</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-0 bg-green-700 rounded"></div>
+        <div class="w-3 h-0 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">June</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-0 bg-green-700 rounded"></div>
+        <div class="w-3 h-0 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">July</span>
+      </div>
+       <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-0 bg-green-700 rounded"></div>
+        <div class="w-3 h-0 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">August</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-0 bg-green-700 rounded"></div>
+        <div class="w-3 h-0 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">September</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-0 bg-green-700 rounded"></div>
+        <div class="w-3 h-0 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">October</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-0 bg-green-700 rounded"></div>
+        <div class="w-3 h-0 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">November</span>
+      </div>
+      <div class="col-span-1 flex flex-col justify-end items-center">
+        <div class="w-3 h-0 bg-green-700 rounded"></div>
+        <div class="w-3 h-0 bg-red-600 rounded mt-1"></div>
+        <span class="text-xs mt-2">December</span>
+      </div>
+    </div>
+    <div class="flex justify-center gap-6 mt-4">
+      <div class="flex items-center gap-2">
+        <span class="block w-3 h-3 rounded-full bg-green-700"></span>
+        <span class="text-sm">Income</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="block w-3 h-3 rounded-full bg-red-600"></span>
+        <span class="text-sm">Expenses</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detailed Breakdown -->
+<div class="row">
+    <!-- Top Payables -->
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header">
+          <h5 class="mb-0">Top Payables</h5>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Supplier</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Food Supplier GmbH</td>
+                  <td>€4,200</td>
+                  <td><span class="badge bg-danger">Overdue</span></td>
+                </tr>
+                <tr>
+                  <td>Drink Supplier</td>
+                  <td>€1,800</td>
+                  <td><span class="badge bg-warning">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Cleaning Supplies Ltd.</td>
+                  <td>€1,500</td>
+                  <td><span class="badge bg-success">On Time</span></td>
+                </tr>
+                <tr>
+                  <td>Furniture & Equipment</td>
+                  <td>€2,000</td>
+                  <td><span class="badge bg-success">On Time</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-auto text-end">
+            <a href="#" class="btn btn-outline-secondary">View All Payables</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Top Receivables -->
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header">
+          <h5 class="mb-0">Top Receivables</h5>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Corporate Diner A</td>
+                  <td>€3,000</td>
+                  <td><span class="badge bg-warning">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Family Group B</td>
+                  <td>€1,500</td>
+                  <td><span class="badge bg-warning">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Event Client C</td>
+                  <td>€2,200</td>
+                  <td><span class="badge bg-danger">Overdue</span></td>
+                </tr>
+                <tr>
+                  <td>Regular Customers</td>
+                  <td>€1,750</td>
+                  <td><span class="badge bg-success">On Time</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-auto text-end">
+            <a href="#" class="btn btn-outline-secondary">View All Receivables</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Cash Flow Summary -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="mb-0">Cash Flow Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h6 class="text-success">Cash In</h6>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Customer Payments:</span>
+                    <span class="fw-bold">€10,500</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Event Income:</span>
+                    <span class="fw-bold">€2,000</span>
+                  </div>
+                  <hr>
+                  <div class="d-flex justify-content-between">
+                    <span class="fw-bold">Total In:</span>
+                    <span class="fw-bold text-success">€12,500</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h6 class="text-danger">Cash Out</h6>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Supplier Payments:</span>
+                    <span class="fw-bold">€6,800</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Staff Salaries:</span>
+                    <span class="fw-bold">€4,200</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Other Expenses:</span>
+                    <span class="fw-bold">€1,100</span>
+                  </div>
+                  <hr>
+                  <div class="d-flex justify-content-between">
+                    <span class="fw-bold">Total Out:</span>
+                    <span class="fw-bold text-danger">€12,100</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                  <h6>Net Cash Flow</h6>
+                  <h1 class="display-6">€-400</h1>
+                  <small>for selected period</small>
+                  <div class="mt-3">
+                    <span class="badge bg-dark">Negative Cash Flow</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</main>
+</div>
+</body>
+</html>
+<script>
+    fetch('../sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+  </script>

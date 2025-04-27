@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Owner Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+<script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+    <style>
+        .sidebar {
+            min-height: 100vh;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .progress {
+            height: 10px;
+        }
+        .efficiency-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .location-selector .btn-check:checked + .btn {
+            background-color: #0d6efd;
+            color: white;
+        }
+        [x-cloak] { display: none !important; }
+        .food-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .chart-container {
+            height: 250px !important;
+        }
+    </style>
+</head>
+<div id="sidebar-container"></div>
+<body class="bg-gray-100">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Dashboard Overview</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Today</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Week</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Month</button>
+                            <select class="form-select">
+                                <option>All locations</option>
+                                <option>Frankfurt</option>
+                                <option>Koblenz</option>
+                                <option>Koln</option>
+                                <option>Westerwald</option>
+                                <option>Wiesbaden</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white h-100 card-hover">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title">TODAY'S REVENUE</h6>
+                                        <h2 class="mb-0">$2,450</h2>
+                                        <span class="text-white-50">+12% from yesterday</span>
+                                    </div>
+                                    <i class="fas fa-dollar-sign fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white h-100 card-hover">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title">TODAY'S ORDERS</h6>
+                                        <h2 class="mb-0">48</h2>
+                                        <span class="text-white-50">+5% from yesterday</span>
+                                    </div>
+                                    <i class="fas fa-shopping-bag fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-dark h-100 card-hover">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title">AVG. ORDER VALUE</h6>
+                                        <h2 class="mb-0">$51.04</h2>
+                                        <span class="text-dark-50">+$3.20 from yesterday</span>
+                                    </div>
+                                    <i class="fas fa-chart-bar fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-info text-white h-100 card-hover">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title">CUSTOMER SATISFACTION</h6>
+                                        <h2 class="mb-0">4.8/5</h2>
+                                        <span class="text-white-50">Based on 32 reviews</span>
+                                    </div>
+                                    <i class="fas fa-smile fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Tables -->
+                <div class="row">
+                    <!-- Revenue Chart -->
+                    <div class="col-md-8 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="card-title">Weekly Revenue</h5>
+                            </div>
+                            <div class="card-body chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Items -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">Top Selling Items</h5>
+                                <a href="#" class="btn btn-sm btn-outline-primary">See All</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                 alt="Margherita Pizza" class="food-image me-3">
+                                            <div>
+                                                <h6 class="mb-1">Margherita Pizza</h6>
+                                                <small class="text-muted">Italian</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">38</span>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                 alt="Remo's Pizza" class="food-image me-3">
+                                            <div>
+                                                <h6 class="mb-1">Remo's Pizza</h6>
+                                                <small class="text-muted">House Special</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">35</span>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                 alt="Remo's Special" class="food-image me-3">
+                                            <div>
+                                                <h6 class="mb-1">Remo's Special</h6>
+                                                <small class="text-muted">Signature Dish</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">32</span>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" 
+                                                 alt="Pasta Bolognese" class="food-image me-3">
+                                            <div>
+                                                <h6 class="mb-1">Pasta Bolognese</h6>
+                                                <small class="text-muted">Italian</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">28</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Efficiency Analysis Section -->
+                <div class="row mb-4" x-data="productEfficiency">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Product Efficiency Analysis</h5>
+                                    <p class="card-subtitle text-muted mb-0">Compare production efficiency across locations</p>
+                                </div>
+                                <a href="#" class="btn btn-sm btn-outline-primary">See All Products</a>
+                            </div>
+                            <div class="card-body">
+                                <!-- Location Selector -->
+                                <div class="d-flex flex-wrap gap-2 location-selector mb-3">
+                                    <template x-for="location in locations">
+                                        <div>
+                                            <input type="radio" class="btn-check" name="locationOptions" 
+                                                   :id="'location'+location.id" autocomplete="off" 
+                                                   x-model="selectedLocation" :value="location.id">
+                                            <label class="btn btn-outline-primary btn-sm" 
+                                                   :for="'location'+location.id" x-text="location.name"></label>
+                                        </div>
+                                    </template>
+                                    <div>
+                                        <input type="radio" class="btn-check" name="locationOptions" id="locationAll" autocomplete="off" 
+                                               x-model="selectedLocation" value="all">
+                                        <label class="btn btn-outline-primary btn-sm" for="locationAll">All Locations</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Product Selector -->
+                                <div class="mb-4">
+                                    <label class="form-label">Select Product</label>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <template x-for="product in products">
+                                            <div>
+                                                <input type="radio" class="btn-check" name="productOptions" 
+                                                       :id="'product'+product.id" autocomplete="off" 
+                                                       x-model="selectedProduct" :value="product.id">
+                                                <label class="btn btn-outline-secondary" 
+                                                       :for="'product'+product.id" x-text="product.name"></label>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                
+                                <!-- Efficiency Metrics Summary -->
+                                <div class="row mb-4">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-subtitle mb-2 text-muted">Avg. Products per Ingredient</h6>
+                                                <h2 class="mb-0" x-text="avgEfficiency.toFixed(1)"></h2>
+                                                <span class="text-success" x-show="avgEfficiency > standardEfficiency">
+                                                    <i class="fas fa-arrow-up"></i> Above Standard
+                                                </span>
+                                                <span class="text-danger" x-show="avgEfficiency <= standardEfficiency">
+                                                    <i class="fas fa-arrow-down"></i> Below Standard
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-subtitle mb-2 text-muted">Total Products Made</h6>
+                                                <h2 class="mb-0" x-text="totalProductsMade"></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-subtitle mb-2 text-muted">Avg. Rating</h6>
+                                                <h2 class="mb-0" x-text="avgRating.toFixed(1)"></h2>
+                                                <div class="text-warning">
+                                                    <template x-for="i in 5">
+                                                        <i :class="i <= Math.round(avgRating) ? 'fas fa-star' : 'far fa-star'"></i>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Efficiency Chart -->
+                                <div class="chart-container mb-4">
+                                    <canvas id="efficiencyChart"></canvas>
+                                </div>
+                                
+                                <!-- Detailed Table -->
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Ingredient</th>
+                                                <th>Qty Used</th>
+                                                <th>Products Made</th>
+                                                <th>Efficiency</th>
+                                                <th>Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template x-for="item in filteredItems" :key="item.id">
+                                                <tr>
+                                                    <td x-text="item.ingredient"></td>
+                                                    <td x-text="item.qtyUsed + ' ' + item.unit"></td>
+                                                    <td x-text="item.productsMade"></td>
+                                                    <td>
+                                                        <span class="badge rounded-pill" 
+                                                              :class="{
+                                                                  'bg-success': item.efficiency >= standardEfficiency,
+                                                                  'bg-danger': item.efficiency < standardEfficiency
+                                                              }">
+                                                            <span x-text="item.efficiency.toFixed(1)"></span>:1
+                                                        </span>
+                                                    </td>
+                                                    <td x-text="item.location"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Reviews -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Recent Customer Reviews</h5>
+                                <a href="#" class="btn btn-sm btn-outline-primary">See All</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between mb-3">
+                                                    <div>
+                                                        <h6 class="mb-0">Margherita Pizza</h6>
+                                                        <div class="text-warning">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted">2 days ago</small>
+                                                </div>
+                                                <p class="card-text">"The pizza was perfectly cooked with just the right amount of cheese!"</p>
+                                                <div class="d-flex align-items-center">
+                                                    <div>
+                                                        <h6 class="mb-0">Jessica Parker</h6>
+                                                        <small class="text-muted">Frankfurt</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between mb-3">
+                                                    <div>
+                                                        <h6 class="mb-0">Remo's Special</h6>
+                                                        <div class="text-warning">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted">5 days ago</small>
+                                                </div>
+                                                <p class="card-text">"Absolutely delicious, though a bit pricey. Worth it for special occasions."</p>
+                                                <div class="d-flex align-items-center">
+                                                    <div>
+                                                        <h6 class="mb-0">David Miller</h6>
+                                                        <small class="text-muted">Koln</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between mb-3">
+                                                    <div>
+                                                        <h6 class="mb-0">Pasta Bolognese</h6>
+                                                        <div class="text-warning">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="far fa-star"></i>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted">1 week ago</small>
+                                                </div>
+                                                <p class="card-text">"Good but the sauce was a bit too salty for my taste."</p>
+                                                <div class="d-flex align-items-center">
+                                                    <div>
+                                                        <h6 class="mb-0">Sarah Johnson</h6>
+                                                        <small class="text-muted">Wiesbaden</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Alpine JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        // Product Efficiency Analysis Component
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('productEfficiency', () => ({
+                selectedLocation: 'all',
+                selectedProduct: 1, // Default to Margherita Pizza
+                standardEfficiency: 8.0,
+                locations: [
+                    { id: 1, name: 'Frankfurt' },
+                    { id: 2, name: 'Koblenz' },
+                    { id: 3, name: 'Koln' },
+                    { id: 4, name: 'Westerwald' },
+                    { id: 5, name: 'Wiesbaden' }
+                ],
+                products: [
+                    { id: 1, name: 'Margherita Pizza' },
+                    { id: 2, name: 'Remo\'s Pizza' },
+                    { id: 3, name: 'Remo\'s Special' },
+                    { id: 4, name: 'Pasta Bolognese' }
+                ],
+                efficiencyData: [
+                    // Margherita Pizza data
+                    { id: 1, product: 'Margherita Pizza', ingredient: 'Cheese', qtyUsed: 10, unit: 'kg', productsMade: 85, efficiency: 8.5, revenue: 1275, location: 'Frankfurt', rating: 4.8 },
+                    { id: 2, product: 'Margherita Pizza', ingredient: 'Tomatoes', qtyUsed: 8, unit: 'kg', productsMade: 85, efficiency: 10.6, revenue: 1275, location: 'Frankfurt', rating: 4.8 },
+                    { id: 3, product: 'Margherita Pizza', ingredient: 'Cheese', qtyUsed: 8, unit: 'kg', productsMade: 60, efficiency: 7.5, revenue: 900, location: 'Koblenz', rating: 4.5 },
+                    { id: 4, product: 'Margherita Pizza', ingredient: 'Tomatoes', qtyUsed: 6, unit: 'kg', productsMade: 60, efficiency: 10.0, revenue: 900, location: 'Koblenz', rating: 4.5 },
+                    { id: 5, product: 'Margherita Pizza', ingredient: 'Cheese', qtyUsed: 12, unit: 'kg', productsMade: 110, efficiency: 9.2, revenue: 1650, location: 'Koln', rating: 4.9 },
+                    { id: 6, product: 'Margherita Pizza', ingredient: 'Tomatoes', qtyUsed: 9, unit: 'kg', productsMade: 110, efficiency: 12.2, revenue: 1650, location: 'Koln', rating: 4.9 },
+                    
+                    // Remo's Pizza data
+                    { id: 7, product: 'Remo\'s Pizza', ingredient: 'Cheese', qtyUsed: 9, unit: 'kg', productsMade: 70, efficiency: 7.8, revenue: 1400, location: 'Frankfurt', rating: 4.7 },
+                    { id: 8, product: 'Remo\'s Pizza', ingredient: 'Special Sauce', qtyUsed: 5, unit: 'kg', productsMade: 70, efficiency: 14.0, revenue: 1400, location: 'Frankfurt', rating: 4.7 },
+                    { id: 9, product: 'Remo\'s Pizza', ingredient: 'Cheese', qtyUsed: 7, unit: 'kg', productsMade: 50, efficiency: 7.1, revenue: 1000, location: 'Westerwald', rating: 4.3 },
+                    { id: 10, product: 'Remo\'s Pizza', ingredient: 'Special Sauce', qtyUsed: 4, unit: 'kg', productsMade: 50, efficiency: 12.5, revenue: 1000, location: 'Westerwald', rating: 4.3 },
+                    
+                    // Remo's Special data
+                    { id: 11, product: 'Remo\'s Special', ingredient: 'Premium Meat', qtyUsed: 6, unit: 'kg', productsMade: 30, efficiency: 5.0, revenue: 1800, location: 'Koln', rating: 4.9 },
+                    { id: 12, product: 'Remo\'s Special', ingredient: 'Truffle', qtyUsed: 0.2, unit: 'kg', productsMade: 30, efficiency: 150.0, revenue: 1800, location: 'Koln', rating: 4.9 },
+                    { id: 13, product: 'Remo\'s Special', ingredient: 'Premium Meat', qtyUsed: 4, unit: 'kg', productsMade: 18, efficiency: 4.5, revenue: 1080, location: 'Wiesbaden', rating: 4.6 },
+                    { id: 14, product: 'Remo\'s Special', ingredient: 'Truffle', qtyUsed: 0.15, unit: 'kg', productsMade: 18, efficiency: 120.0, revenue: 1080, location: 'Wiesbaden', rating: 4.6 },
+                    
+                    // Pasta Bolognese data
+                    { id: 15, product: 'Pasta Bolognese', ingredient: 'Pasta', qtyUsed: 5, unit: 'kg', productsMade: 45, efficiency: 9.0, revenue: 900, location: 'Frankfurt', rating: 4.4 },
+                    { id: 16, product: 'Pasta Bolognese', ingredient: 'Tomatoes', qtyUsed: 4, unit: 'kg', productsMade: 45, efficiency: 11.3, revenue: 900, location: 'Frankfurt', rating: 4.4 },
+                    { id: 17, product: 'Pasta Bolognese', ingredient: 'Pasta', qtyUsed: 4, unit: 'kg', productsMade: 35, efficiency: 8.8, revenue: 700, location: 'Koblenz', rating: 4.2 },
+                    { id: 18, product: 'Pasta Bolognese', ingredient: 'Tomatoes', qtyUsed: 3, unit: 'kg', productsMade: 35, efficiency: 11.7, revenue: 700, location: 'Koblenz', rating: 4.2 }
+                ],
+                get filteredItems() {
+                    let items = this.efficiencyData;
+                    const selectedProductName = this.products.find(p => p.id == this.selectedProduct)?.name;
+                    
+                    // Filter by product
+                    items = items.filter(item => item.product === selectedProductName);
+                    
+                    // Filter by location
+                    if (this.selectedLocation !== 'all') {
+                        const loc = this.locations.find(l => l.id == this.selectedLocation);
+                        items = items.filter(item => item.location === loc.name);
+                    }
+                    
+                    return items;
+                },
+                get avgEfficiency() {
+                    const filtered = this.filteredItems;
+                    if (filtered.length === 0) return 0;
+                    return filtered.reduce((sum, item) => sum + item.efficiency, 0) / filtered.length;
+                },
+                get totalProductsMade() {
+                    const filtered = this.filteredItems;
+                    if (filtered.length === 0) return 0;
+                    return filtered[0].productsMade; // All entries for same product will have same productsMade
+                },
+                get avgRating() {
+                    const filtered = this.filteredItems;
+                    if (filtered.length === 0) return 0;
+                    return filtered[0].rating; // All entries for same product will have same rating
+                },
+                init() {
+                    // Initialize the efficiency chart after a small delay to ensure DOM is ready
+                    setTimeout(() => {
+                        this.initEfficiencyChart();
+                    }, 100);
+                },
+                initEfficiencyChart() {
+                    const ctx = document.getElementById('efficiencyChart').getContext('2d');
+                    const selectedProductName = this.products.find(p => p.id == this.selectedProduct)?.name;
+                    
+                    // Filter data for the selected product
+                    const productData = this.efficiencyData.filter(item => item.product === selectedProductName);
+                    
+                    // Group by location
+                    const locations = this.locations.map(loc => loc.name);
+                    const efficiencyData = locations.map(loc => {
+                        const items = productData.filter(item => item.location === loc);
+                        return items.length > 0 ? items[0].efficiency : 0;
+                    });
+                    
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: locations,
+                            datasets: [{
+                                label: 'Efficiency Ratio (Products per Ingredient)',
+                                data: efficiencyData,
+                                backgroundColor: efficiencyData.map(eff => 
+                                    eff >= this.standardEfficiency ? 'rgba(40, 167, 69, 0.7)' : 'rgba(220, 53, 69, 0.7)'
+                                ),
+                                borderColor: efficiencyData.map(eff => 
+                                    eff >= this.standardEfficiency ? 'rgba(40, 167, 69, 1)' : 'rgba(220, 53, 69, 1)'
+                                ),
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Efficiency Ratio'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Location'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: selectedProductName + ' Efficiency by Location'
+                                },
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+            }));
+        });
+
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'This Week',
+                    data: [1200, 1900, 1700, 2100, 2800, 3200, 2450],
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }, {
+                    label: 'Last Week',
+                    data: [1000, 1600, 1500, 1800, 2400, 2900, 2100],
+                    backgroundColor: 'rgba(108, 117, 125, 0.1)',
+                    borderColor: 'rgba(108, 117, 125, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    borderDash: [5, 5]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+<script>
+    fetch('sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      });
+  </script>
